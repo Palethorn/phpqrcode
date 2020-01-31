@@ -1,0 +1,23 @@
+{
+    "name": "palethorn/phpqrcode",
+    "version": "1.0.0",
+    "license": "",
+    "description": "LGPL",
+    "type": "library",
+    "keywords": [],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-imagick": "*"
+    },
+    "suggest": {
+        "ext-gd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpQrCode\\": "src"
+        },
+        "files": [
+            "src/config.php"
+        ]
+    }
+}
