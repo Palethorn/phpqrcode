@@ -45,8 +45,8 @@ class QrImage {
             $h = count($frame);
             $w = strlen($frame[0]);
             
-            $imgW = $w + 2*$outerFrame;
-            $imgH = $h + 2*$outerFrame;
+            $imgW = $w + 2 * $outerFrame;
+            $imgH = $h + 2 * $outerFrame;
             
             $base_image = new \Imagick();
             $base_image->newImage($imgW, $imgH, new \ImagickPixel('white'));
@@ -79,7 +79,7 @@ class QrImage {
             // ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
             // $base_image->destroy();
             // ImageDestroy($base_image);
-            $base_image->resizeImage($imgW * $pixelPerPoint, $imgH * $pixelPerPoint, \Imagick::FILTER_LANCZOS, 0);
+            $base_image->scaleImage($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             
             return $base_image;
             // return $target_image;
