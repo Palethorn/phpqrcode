@@ -1,6 +1,6 @@
 {
     "name": "palethorn/phpqrcode",
-    "license": "LGPL-3.0",
+    "license": "LGPL-3.0-only",
     "description": "PHP library for generating QR code images",
     "type": "library",
     "keywords": [],
