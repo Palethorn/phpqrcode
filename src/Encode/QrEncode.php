@@ -109,7 +109,7 @@ class QrEncode {
         }
     }
     
-    public function encodePNG($intext, $outfile = false,$saveandprint=false) {
+    public function encodePNG($intext, $outfile = false, $saveandprint=false) {
         try {
         
             ob_start();
@@ -132,7 +132,7 @@ class QrEncode {
         }
     }
 
-    public function encodeJPEG($intext, $outfile = false,$saveandprint=false) {
+    public function encodeJPEG($intext, $outfile = false, $saveandprint=false) {
         try {
             ob_start();
             $tab = $this->encode($intext);
