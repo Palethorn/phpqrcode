@@ -25,8 +25,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace PhpQrCode\Encode;
+namespace PhpQrCode;
 
+use PhpQrCode\Encode\FrameFiller;
+use PhpQrCode\Encode\QrEncode;
+use PhpQrCode\Encode\QrRawCode;
 use PhpQrCode\Input\QrInput;
 use PhpQrCode\QrMask;
 use PhpQrCode\QrSpec;
@@ -39,9 +42,7 @@ class QrCode {
     public $width;
     public $data; 
     
-    //----------------------------------------------------------------------
-    public function encodeMask(QrInput $input, $mask)
-    {
+    public function encodeMask(QrInput $input, $mask) {
         if($input->getVersion() < 0 || $input->getVersion() > QRSPEC_VERSION_MAX) {
             throw new \Exception('wrong version');
         }
@@ -114,15 +115,11 @@ class QrCode {
         return $this;
     }
 
-    //----------------------------------------------------------------------
-    public function encodeInput(QrInput $input)
-    {
+    public function encodeInput(QrInput $input) {
         return $this->encodeMask($input, -1);
     }
     
-    //----------------------------------------------------------------------
-    public function encodeString8bit($string, $version, $level)
-    {
+    public function encodeString8bit($string, $version, $level) {
         if($string == NULL) {
             throw new \Exception('empty string!');
             return NULL;
@@ -139,9 +136,7 @@ class QrCode {
         return $this->encodeInput($input);
     }
 
-    //----------------------------------------------------------------------
-    public function encodeString($string, $version, $level, $hint, $casesensitive)
-    {
+    public function encodeString($string, $version, $level, $hint, $casesensitive) {
 
         if($hint != QR_MODE_8 && $hint != QR_MODE_KANJI) {
             throw new \Exception('bad hint');
@@ -159,23 +154,22 @@ class QrCode {
         return $this->encodeInput($input);
     }
     
-    //----------------------------------------------------------------------
-    public static function png($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false) 
-    {
-        $enc = QrEncode::factory($level, $size, $margin);
-        return $enc->encodePNG($text, $outfile, $saveandprint=false);
+    public static function png($text, $driver = 'Imagick', $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false) {
+        $enc = QrEncode::factory($level, $size, $margin, $driver);
+        return $enc->encodePNG($text, $outfile, $saveandprint = false);
     }
 
-    //----------------------------------------------------------------------
-    public static function text($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4) 
-    {
+    public static function jpg($text, $driver = 'Imagick', $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint=false) {
+        $enc = QrEncode::factory($level, $size, $margin, $driver);
+        return $enc->encodeJPEG($text, $outfile, $saveandprint = false);
+    }
+
+    public static function text($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4) {
         $enc = QrEncode::factory($level, $size, $margin);
         return $enc->encode($text, $outfile);
     }
 
-    //----------------------------------------------------------------------
-    public static function raw($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4) 
-    {
+    public static function raw($text, $outfile = false, $level = QR_ECLEVEL_L, $size = 3, $margin = 4) {
         $enc = QrEncode::factory($level, $size, $margin);
         return $enc->encodeRAW($text, $outfile);
     }

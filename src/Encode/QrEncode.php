@@ -27,7 +27,7 @@
 
 namespace PhpQrCode\Encode;
 
-use PhpQrCode\QrImage;
+use PhpQrCode\QrCode;
 use PhpQrCode\QrTools;
 
 class QrEncode {
@@ -38,18 +38,18 @@ class QrEncode {
     public $version = 0;
     public $size = 3;
     public $margin = 4;
-    
+    public $driver = 'Imagick';
+
     public $structured = 0; // not supported yet
     
     public $level = QR_ECLEVEL_L;
     public $hint = QR_MODE_8;
     
-    //----------------------------------------------------------------------
-    public static function factory($level = QR_ECLEVEL_L, $size = 3, $margin = 4)
-    {
+    public static function factory($level = QR_ECLEVEL_L, $size = 3, $margin = 4, $driver = 'Imagick') {
         $enc = new QrEncode();
         $enc->size = $size;
         $enc->margin = $margin;
+        $enc->driver = $driver;
         
         switch ($level.'') {
             case '0':
@@ -79,9 +79,7 @@ class QrEncode {
         return $enc;
     }
     
-    //----------------------------------------------------------------------
-    public function encodeRAW($intext, $outfile = false) 
-    {
+    public function encodeRAW($intext, $outfile = false) {
         $code = new QrCode();
 
         if($this->eightbit) {
@@ -93,9 +91,7 @@ class QrEncode {
         return $code->data;
     }
 
-    //----------------------------------------------------------------------
-    public function encode($intext, $outfile = false) 
-    {
+    public function encode($intext, $outfile = false) {
         $code = new QRcode();
 
         if($this->eightbit) {
@@ -113,9 +109,7 @@ class QrEncode {
         }
     }
     
-    //----------------------------------------------------------------------
-    public function encodePNG($intext, $outfile = false,$saveandprint=false) 
-    {
+    public function encodePNG($intext, $outfile = false,$saveandprint=false) {
         try {
         
             ob_start();
@@ -128,8 +122,30 @@ class QrEncode {
             }
             
             $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab)+2*$this->margin));
+            $class = '\\PhpQrCode\\' . $this->driver . '\\QrImage';
+            return $class::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint);
+        
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            QrTools::log($outfile, $e->getMessage());
+            return null;
+        }
+    }
+
+    public function encodeJPEG($intext, $outfile = false,$saveandprint=false) {
+        try {
+            ob_start();
+            $tab = $this->encode($intext);
+            $err = ob_get_contents();
+            ob_end_clean();
             
-            return QrImage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint);
+            if ($err != '') {
+                QrTools::log($outfile, $err);
+            }
+            
+            $maxSize = (int)(QR_PNG_MAXIMUM_SIZE / (count($tab)+2*$this->margin));
+            $class = '\\PhpQrCode\\' . $this->driver . '\\QrImage';
+            return $class::jpg($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint);
         
         } catch (\Exception $e) {
             echo $e->getMessage();

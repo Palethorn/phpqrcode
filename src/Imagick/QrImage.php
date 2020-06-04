@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace PhpQrCode;
+namespace PhpQrCode\Imagick;
 
 define('QR_IMAGE', true);
 
@@ -51,12 +51,6 @@ class QrImage {
             $base_image = new \Imagick();
             $base_image->newImage($imgW, $imgH, new \ImagickPixel('white'));
             $base_image->setImageFormat('PNG');
-            // $base_image = ImageCreate($imgW, $imgH);
-
-            // $col[0] = ImageColorAllocate($base_image,255,255,255);
-            // $col[1] = ImageColorAllocate($base_image,0,0,0);
-
-            // imagefill($base_image, 0, 0, $col[0]);
 
             for($y=0; $y<$h; $y++) {
                 for($x=0; $x<$w; $x++) {
@@ -66,22 +60,12 @@ class QrImage {
                         $draw->setFillColor($color);
                         $draw->point($x + $outerFrame, $y + $outerFrame);
                         $base_image->drawImage($draw);
-
-                        // $pixel = $base_image->getImagePixelColor($x+$outerFrame, $y+$outerFrame);
-                        // ImageSetPixel($base_image,$x+$outerFrame,$y+$outerFrame,$col[1]); 
-                        // $pixel->setColor("black");
                     }
                 }
             }
             
-            // $target_image = $imagick->newImage($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
-            // $target_image =ImageCreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
-            // ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
-            // $base_image->destroy();
-            // ImageDestroy($base_image);
             $base_image->scaleImage($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             
             return $base_image;
-            // return $target_image;
         }
 }
