@@ -1,4 +1,6 @@
 <?php
+namespace PhpQrCode\Input;
+
 /*
  * PHP QR Code encoder
  *
@@ -24,8 +26,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-
-namespace PhpQrCode\Input;
 
 use PhpQrCode\QrBitstream;
 use PhpQrCode\QrSpec;
